@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Эльвира — моё всё ❤️</title>
+    <style>
+        :root {
+            --pink: #ff85a1;
+            --deep-red: #c9184a;
+            --bg: #fff0f3;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg);
+            color: #333;
+            overflow-x: hidden;
+            text-align: center;
+        }
+
+        /* Канвас для постоянных фоновых сердечек */
+        #hearts-canvas {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .polaroid {
+            background: white;
+            padding: 10px 10px 30px 10px;
+            border-radius: 5px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin: 25px 0;
+            transform: rotate(var(--r));
+        }
+        .polaroid img { width: 100%; border-radius: 2px; }
+
+        .nicknames {
+            display: flex; flex-wrap: wrap; justify-content: center;
+            gap: 8px; margin: 30px 0;
+        }
+        .nick-tag {
+            background: white; padding: 8px 15px; border-radius: 20px;
+            border: 1px solid var(--pink); font-size: 0.9rem;
+            color: var(--deep-red); font-weight: bold;
+        }
+
+        .video-card {
+            background: white; padding: 15px; border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05); margin: 30px 0;
+        }
+        video { width: 100%; border-radius: 12px; background: #000; }
+
+        .anniversary {
+            font-size: 2.2rem; font-weight: bold; color: var(--deep-red);
+            margin: 40px 0; animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+
+        /* Магические кнопки */
+        .magic-section {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 40px 0;
+        }
+        .magic-btn {
+            border: none; padding: 20px; border-radius: 20px; cursor: pointer;
+            font-size: 1rem; font-weight: bold; color: white; transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .btn-hearts { background: var(--deep-red); }
+        .btn-flowers { background: #2e7d32; }
+        .magic-btn:active { transform: scale(0.9); }
+
+        /* Анимация летящих элементов */
+        .particle {
+            position: fixed; bottom: -50px; pointer-events: none;
+            z-index: 1000; font-size: 2rem;
+            animation: flyUp 3s linear forwards;
+        }
+        @keyframes flyUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="hearts-canvas"></canvas>
+
+    <div class="container">
+        <h1>Для моей Эли ❤️</h1>
+
+        <div class="polaroid" style="--r: -2deg;">
+            <img src="2.jpg" alt="Эля">
+            <p>Самая лучшая в мире</p>
+        </div>
+
+        <div class="nicknames">
+            <span class="nick-tag">Любимая</span> <span class="nick-tag">Эля</span>
+            <span class="nick-tag">Элька</span> <span class="nick-tag">Эльвирочка</span>
+            <span class="nick-tag">звездочка</span> <span class="nick-tag">моя любовь</span>
+            <span class="nick-tag">маймыл</span> <span class="nick-tag">пупс</span>
+            <span class="nick-tag">киса</span> <span class="nick-tag">зая</span>
+            <span class="nick-tag">кисёк</span> <span class="nick-tag">кисёныш</span>
+            <span class="nick-tag">элькинс</span>
+            <span class="nick-tag">Тамчым</span>
+            <span class="nick-tag">Бал кортым</span>
+            <span class="nick-tag">Җанкисәгем</span>
+            <span class="nick-tag">Алтыным</span>
+        </div>
+
+
+        <div class="magic-section">
+            <button class="magic-btn btn-hearts" onclick="spawnParticles('❤️')">Запустить сердца!</button>
+            <button class="magic-btn btn-flowers" onclick="spawnParticles('🌸')">Запустить цветы!</button>
+        </div>
+
+
+        <div class="video-card">
+            <h2>Лучшая танцорка! 💃</h2>
+            <video controls playsinline loop src="1.MOV"></video>
+        </div>
+
+        <div class="anniversary">6 месяцев вместе! ❤️</div>
+
+        <div class="video-card">
+            <h2>Наши моменты ✨</h2>
+            <video controls playsinline loop src="2.MOV"></video>
+        </div>
+
+        
+
+        <div class="polaroid" style="--r: 2deg;">
+            <img src="1.jpg" alt="Мы">
+            <p>Я всегда рядом!</p>
+        </div>
+    </div>
+
+    <script>
+        // Функция для запуска сердец или цветов
+        function spawnParticles(emoji) {
+            for (let i = 0; i < 40; i++) {
+                setTimeout(() => {
+                    const p = document.createElement('div');
+                    p.classList.add('particle');
+                    p.innerText = emoji;
+                    p.style.left = Math.random() * 100 + 'vw';
+                    p.style.fontSize = Math.random() * (40 - 20) + 20 + 'px';
+                    p.style.animationDuration = Math.random() * 2 + 2 + 's';
+                    document.body.appendChild(p);
+                    setTimeout(() => p.remove(), 3000);
+                }, i * 50);
+            }
+        }
+
+        // Фоновые сердечки
+        const canvas = document.getElementById('hearts-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        const hearts = [];
+        class Heart {
+            constructor() { this.reset(true); }
+            reset(initial = false) {
+                this.x = Math.random() * width;
+                this.y = initial ? Math.random() * height : height + 50;
+                this.size = Math.random() * 15 + 10;
+                this.speed = Math.random() * 1 + 0.5;
+                this.opacity = Math.random() * 0.4 + 0.1;
+            }
+            draw() {
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = '#ff85a1';
+                ctx.beginPath();
+                ctx.moveTo(this.x, this.y);
+                ctx.bezierCurveTo(this.x - this.size/2, this.y - this.size/2, this.x - this.size, this.y + this.size/3, this.x, this.y + this.size);
+                ctx.bezierCurveTo(this.size + this.x, this.y + this.size/3, this.x + this.size/2, this.y - this.size/2, this.x, this.y);
+                ctx.fill();
+            }
+            update() {
+                this.y -= this.speed;
+                if (this.y < -50) this.reset();
+                this.draw();
+            }
+        }
+
+        for (let i = 0; i < 20; i++) hearts.push(new Heart());
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            hearts.forEach(h => h.update());
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>
